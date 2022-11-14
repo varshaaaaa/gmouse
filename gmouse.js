@@ -30,6 +30,7 @@ noble.on('discover', async (peripheral) => {
 //
 // read data periodically
 //
+let store = []
 let readData = async (characteristics) => {
   let ax = await characteristics[0].readAsync();
   let ay = await characteristics[1].readAsync();
@@ -38,7 +39,12 @@ let readData = async (characteristics) => {
   let gy = await characteristics[4].readAsync();
   let gz = await characteristics[5].readAsync();
 
-  console.log("ax: " + ax.readFloatLE(0) + ", ay: " + ay.readFloatLE(0) + ", az: " + az.readFloatLE(0) + " gx: " + gx.readFloatLE(0) + ", gy: " + gy.readFloatLE(0) + ", gz: " + gz.readFloatLE(0));
-
   setTimeout(readData, 100, characteristics);
+    if (store.length < 10){
+      store.push(ax.readFloatLE(0))
+    }
+    else{
+      store = []
+    }
+    console.log("Store:" + store)
 }
